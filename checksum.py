@@ -42,7 +42,4 @@ def correcao(palavra, tam):
     else:
         return False
 
-def main():
-    palavra = ["0111","1000","0101","0100"]
-    print(correcao(checksum(palavra),len(palavra)))
-main()
+

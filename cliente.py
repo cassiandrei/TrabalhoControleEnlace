@@ -1,5 +1,6 @@
 import socket
 from time import time
+import checksum
 
 class Cliente:
 
@@ -24,6 +25,8 @@ class Cliente:
 		msg = input()
 		msg = msg.encode('utf8')
 		while msg != '\x18':
+			#oi
+			checksum(msg)
 			self.cliente.send(msg)
 			msg = input()
 			msg = msg.encode('utf8')
