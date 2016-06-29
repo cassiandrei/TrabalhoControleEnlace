@@ -1,4 +1,5 @@
 import socket
+from checksum import *
 
 class Server:
 
@@ -18,6 +19,10 @@ class Server:
 			while True:
 				msg = conexao.recv(1024)
 				if not msg: break
+				if correcao(msg):
+					print("Mensagem recebida sem erros!")
+				else:
+					break
 				print(cliente, 'Enviou a mensagem: ', msg)
 			print('Fim da conexao com cliente: ', cliente)
 			conexao.close()

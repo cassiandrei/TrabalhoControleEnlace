@@ -1,6 +1,6 @@
 import socket
 from time import time
-import checksum
+from checksum import *
 
 class Cliente:
 
@@ -20,21 +20,14 @@ class Cliente:
 		#self.cliente.settimeout(3)
 
 	def enviar(self):
-		#funcao CRC,CHECKSUM CASSIANO
 		print('Digite uma mensagem para enviar ao servidor')
 		msg = input()
-		msg = msg.encode('utf8')
 		while msg != '\x18':
-			#oi
-			checksum(msg)
-			self.cliente.send(msg)
+			bits = check(msg)
+			bits = bits.encode('utf8')
+			self.cliente.send(bits)
 			msg = input()
-			msg = msg.encode('utf8')
-		self.cliente.close()	
-
-	def receber(self):
-		#funcao de checagem 
-		self.cliente.recv(min())
+		self.cliente.close()
 
 cli = Cliente()
 cli.cria_cliente()

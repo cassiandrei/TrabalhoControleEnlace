@@ -1,4 +1,5 @@
-def checksum(List):
+def check(palavra):
+    List = ''.join(map(bin,bytearray(palavra,'utf8'))).split('0b')[1:]
     result = 0
     for num in List:
         result += int(num,2)
@@ -19,7 +20,9 @@ def checksum(List):
     return final
 
 #tam = tamanho do checksum
-def correcao(palavra, tam):
+def correcao(palavra):
+    palavra = palavra.decode('utf8')
+    tam = len(palavra[0])
     check = palavra[len(palavra)-tam:]
     palavra = palavra[:len(palavra)-tam]
     lista = []
@@ -41,5 +44,3 @@ def correcao(palavra, tam):
         return True
     else:
         return False
-
-
