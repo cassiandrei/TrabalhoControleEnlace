@@ -1,6 +1,7 @@
 import socket
 from time import time
 from checksum import *
+from random import choice
 
 class Cliente:
 
@@ -24,6 +25,14 @@ class Cliente:
 		msg = input()
 		while msg != '\x18':
 			bits = check(msg)
+			ruido = choice([0,1])
+			if ruido == 1:
+				print("RUIDO")
+				pos=choice([0,len(bits)-1])
+				if bits[pos]=='1':
+					bits = bits[:pos-1] + "01" + bits[pos:]
+				else:
+					bits = bits[:pos-1] + "10" + bits[pos:]
 			bits = bits.encode('utf8')
 			self.cliente.send(bits)
 			msg = input()

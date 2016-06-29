@@ -22,13 +22,14 @@ def check(palavra):
 #tam = tamanho do checksum
 def correcao(palavra):
     palavra = palavra.decode('utf8')
-    tam = len(palavra[0])
+    tam = 7
     check = palavra[len(palavra)-tam:]
     palavra = palavra[:len(palavra)-tam]
     lista = []
-    for i in range(tam):
+    while len(palavra)>0:
         lista.append(palavra[:tam])
-        palavra = palavra[4:]
+        palavra = palavra[tam:]
+    print(lista)
     soma = 0
     for num in lista:
         soma += int(num,2)

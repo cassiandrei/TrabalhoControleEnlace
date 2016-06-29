@@ -19,10 +19,10 @@ class Server:
 			while True:
 				msg = conexao.recv(1024)
 				if not msg: break
-				if correcao(msg):
+				if correcao(msg)==True:
 					print("Mensagem recebida sem erros!")
 				else:
-					break
+					print("ERRO!")
 				print(cliente, 'Enviou a mensagem: ', msg)
 			print('Fim da conexao com cliente: ', cliente)
 			conexao.close()
