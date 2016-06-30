@@ -4,7 +4,7 @@ from checksum import *
 class Server:
 
 	HOST = ''
-	PORT = 5555
+	PORT = 5554
 
 	def cria_server(self):
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,16 +16,21 @@ class Server:
 			print('Esperando conexao')
 			self.conexao, self.cliente = self.server.accept()
 			print('Conectado por ', self.cliente)
+			cont = 1
 			while True:
 				msg = self.conexao.recv(2048)
-				if not msg: break
-				if correcao(msg)==True:
-					print("Mensagem recebida sem erros!")
+				if correcao(msg):
+					cont += 1
+					print("Frame verificado com sucesso")
+					msg = '0'
+					#msg = msg.decode('utf8')
+					self.conexao.send(str.encode(msg))
 				else:
-					print("ERRO!")
-				print(self.cliente, 'Enviou a mensagem: ', msg)
-				msg = msg.decode('utf8')
-				self.conexao.send(str.encode(msg))
+					print("Frame: com erro")
+					msg = str(cont)
+					#msg = msg.decode('utf8')
+					self.conexao.send(str.encode(msg))
+
 			print('Fim da conexao com cliente: ', self.cliente)
 			self.conexao.close()
 

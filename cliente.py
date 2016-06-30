@@ -6,7 +6,7 @@ from random import choice
 class Cliente:
 
 	HOST = ''
-	PORT = 5555
+	PORT = 5554
 
 
 	def cria_cliente(self):
@@ -17,25 +17,46 @@ class Cliente:
 		print('Conexao criada com sucesso')
 
 	def enviar(self):
-		print('Digite uma mensagem para enviar ao servidor')
-		msg = input()
-		while msg != '\x18':
-			bits = check(msg)
-			ruido = choice([0,1])
-			if ruido == 1:
-				print("RUIDO")
-				pos=choice([0,len(bits)-1])
-				if bits[pos]=='1':
-					bits = bits[:pos-1] + "01" + bits[pos:]
-				else:
-					bits = bits[:pos-1] + "10" + bits[pos:]
-			bits = bits.encode('utf8')
-			self.cliente.send(bits)
-			self.cliente.settimeout(5)
-			msg = self.cliente.recv(2048)
-			msg = msg.decode('utf8')
-			print("Mensagem recebida: " + msg)
+		while(1):
+			print('Digite uma mensagem para enviar ao servidor')
 			msg = input()
+			texto = msg
+			cont = 0
+			frame = ""
+			salvo = []
+			while len(texto)>0:
+				#listframes = texto[:4]
+
+				frame = texto[:1]
+				texto = texto[1:]
+				ruido = choice([0,1])
+				salvo.append(frame)
+				if ruido == 1:
+					print("RUIDO em frame: ", cont)
+					pos=choice([0,len(frame)-1])
+					if frame[pos]=='1':
+						frame = frame[:pos-1] + "0" + frame[pos:]
+					else:
+						frame = frame[:pos-1] + "1" + frame[pos:]
+				#envia check(frame)
+				bits = check(frame)
+				bits = bits.encode('utf8')
+				self.cliente.send(bits)
+				self.cliente.settimeout(5)
+				confir = self.cliente.recv(2048)
+				confir = confir.decode('utf8')
+				if confir is not '0':
+					cont += 1
+				else:
+					for x in salvo:
+						self.cliente.send(bits)
+						self.cliente.settimeout(5)
+						confir = self.cliente.recv(2048)
+						confir = confir.decode('utf8')
+						if confir is '0':
+							print("ACK, Frame reenviada com sucesso")
+					salvo = []
+
 		self.cliente.close()
 
 cli = Cliente()
