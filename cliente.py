@@ -6,19 +6,15 @@ from random import choice
 class Cliente:
 
 	HOST = ''
-	PORT = 5000
+	PORT = 5555
 
 
 	def cria_cliente(self):
 		self.cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	def conecta(self):
-		#try:
 		self.cliente.connect((self.HOST, self.PORT))
 		print('Conexao criada com sucesso')
-		#except ConnectRefusedError:
-		#print("Nao foi possivel fazer a conexão")
-		#self.cliente.settimeout(3)
 
 	def enviar(self):
 		print('Digite uma mensagem para enviar ao servidor')
@@ -35,6 +31,10 @@ class Cliente:
 					bits = bits[:pos-1] + "10" + bits[pos:]
 			bits = bits.encode('utf8')
 			self.cliente.send(bits)
+			self.cliente.settimeout(5)
+			msg = self.cliente.recv(2048)
+			msg = msg.decode('utf8')
+			print("Mensagem recebida: " + msg)
 			msg = input()
 		self.cliente.close()
 
