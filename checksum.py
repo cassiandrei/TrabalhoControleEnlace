@@ -2,6 +2,8 @@ def check(palavra):
     List = ''.join(map(bin,bytearray(palavra,'utf8'))).split('0b')[1:]
     result = 0
     for num in List:
+        if len(num) == 6:
+            num= "0" + num
         result += int(num,2)
     if len(bin(result).split('0b')[1]) > len(num):
         a = bin(result).split('0b')[1][:len(bin(result).split('0b')[1])-len(num)]
@@ -29,7 +31,6 @@ def correcao(palavra):
     while len(palavra)>0:
         lista.append(palavra[:tam])
         palavra = palavra[tam:]
-    print(lista)
     soma = 0
     for num in lista:
         soma += int(num,2)
